@@ -1,26 +1,57 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <section>
+    <DoneList></DoneList>
+    <ToDoList></ToDoList>
+  </section>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import DoneList from "@/components/DoneList/TheDoneList";
+import ToDoList from "@/components/ToDoList/TheToDoList";
+
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    DoneList, ToDoList
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  box-sizing: border-box;
+  --darkOrange: rgb(185, 96, 41);
+  --offWhite: rgb(185, 185, 185);
+  --mainGrdC1: rgb(47, 90, 218);
+  --mainGrdC2: rgb(211, 105, 105);
+}
+
+body {
+  background: rgb(26, 26, 26);
+  font-family: Palanquin, serif;
+  color: var(--offWhite);
+  margin: 0;
+  overflow: hidden;
+}
+
+section {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+input, textarea {
+  border: none;
+  outline: none;
+  background: none;
+  font-family: Palanquin, serif;
+  color: var(--offWhite);;
+}
+
+.flex {
+  display: flex;
 }
 </style>
