@@ -21,7 +21,7 @@ export default {
       return this.isInProjectPage ? 'edit-icon' : 'edit-icon hide'
     },
     backButtonClassName() {
-      return this.isBackButtonActive ? 'backButton active' : 'backButton';
+      return this.isBackButtonActive ? 'back-button active' : 'back-button';
     }
   },
 

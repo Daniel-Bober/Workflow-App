@@ -4,18 +4,19 @@
     <DoneHeader
         :is-back-button-active="isBackButtonActive"
         :list-mode="listMode"
-        :month="headerMonth"
+        :month="selectedMonth"
         :other-months="otherProjectMonths"
         :project-name="headerName"
         @done-back-button="backToProjectList"
         @change-month="changeMonth"
         @change-month-name="changeMonthName"
+        @add-month="addMonth"
+        @delete-month="deleteMonth"
         @edit-projects-list="projectsListEditModeToggle"
-        @edit-days-list="daysListEditModeToggle"
     ></DoneHeader>
 
-    <div class="listMainSection">
-      <ProjectsList v-if="listMode === 'projectsMode'">
+    <div class="list-main-section">
+      <TheProjectsList v-if="listMode === 'projectsMode'">
         <ProjectCard
             v-for="project in projectsList"
             :id="project.id"
@@ -31,7 +32,7 @@
         <DummyProjectCard
             @add-new-project="addNewProject"
         ></DummyProjectCard>
-      </ProjectsList>
+      </TheProjectsList>
 
       <TheDaysList v-else-if="listMode === 'daysMode'">
         <DayCard
@@ -39,7 +40,6 @@
             :key="day.dayIndex"
             :day-nr="day.dayNr"
             :done-tasks="day.doneTasks"
-            :is-days-list-edit-mode-on="daysListEditMode"
             @day-add-task="addNewTask"
         ></DayCard>
         <DummyDayCard
@@ -56,7 +56,7 @@
 import {computed, ref} from "vue";
 
 import DoneHeader from "@/components/DoneList/DoneHeader";
-import ProjectsList from "@/components/DoneList/TheProjectsList";
+import TheProjectsList from "@/components/DoneList/TheProjectsList";
 import ProjectCard from "@/components/DoneList/ProjectCard";
 import TheDaysList from "@/components/DoneList/TheDaysList";
 import DayCard from "@/components/DoneList/DayCard";
@@ -65,33 +65,24 @@ import DummyProjectCard from "@/components/DoneList/DummyProjectCard";
 
 export default {
 
-  components: {DoneHeader, ProjectsList, ProjectCard, TheDaysList, DayCard, DummyDayCard, DummyProjectCard},
+  components: {DoneHeader, TheProjectsList, ProjectCard, TheDaysList, DayCard, DummyDayCard, DummyProjectCard},
 
   setup() {
     // const doneListData = ref(JSON.parse(localStorage.getItem("doneListData")))
     const projectsList = ref([])
 
-    const selectedProject = ref({cardName: 'new', id: 0, months: [{monthName: 'Month', days: []}]});
+    const selectedProjectIndex = ref(null);
+    const selectedMonthIndex = ref(null);
     const listMode = ref('projectsMode');
 
     function projectCardClicked(id) {
-      const clickedElIndex = projectsList.value.findIndex(el => el.id === id);
-      selectedProject.value = projectsList.value[clickedElIndex];
-      if (selectedProject.value.months) {
-        selectedMonth.value = selectedProject.value.months[(selectedProject.value.months.length - 1)];
-      } else {
-        selectedMonth.value = {monthName: 'Add month', days: []}
-      }
+      selectedProjectIndex.value = projectsList.value.findIndex(el => el.id === id);
+      selectedMonthIndex.value = projectsList.value[selectedProjectIndex.value].months.length - 1;
 
       setOtherMonths()
 
       isBackButtonActive.value = true;
       listMode.value = 'daysMode'
-    }
-
-    function editProjectName(id, newName) {
-      const index = projectsList.value.findIndex(el => el.id === id);
-      projectsList.value[index].cardName = newName;
     }
 
 
@@ -100,13 +91,7 @@ export default {
       const newProject = {
         cardName: 'new',
         id: id,
-        months: [{monthName: 'maj', days: []}, {monthName: 'czerwiec', days: []}, {
-          monthName: 'lipiec',
-          days: []
-        }, {monthName: 'cos', days: []}, {monthName: 'sierpeiń', days: []}, {monthName: 'wrzesień', days: []}, {
-          monthName: 'paź',
-          days: []
-        }, {monthName: 'listopad', days: []}, {monthName: 'grudzień', days: []},]
+        months: [{monthName: 'month', id: id + 1, days: []}]
       };
       projectsList.value.push(newProject);
     }
@@ -116,14 +101,19 @@ export default {
       projectsList.value.splice(index, 1)
     }
 
+    function editProjectName(id, newName) {
+      const index = projectsList.value.findIndex(el => el.id === id);
+      projectsList.value[index].cardName = newName;
+    }
+
 
     function addNewDay() {
-      const newDay = {dayNr: (selectedMonth.value.days.length + 1), doneTasks: []}
-      selectedMonth.value.days.push(newDay)
+      const newDay = {dayNr: (projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.length + 1), doneTasks: []};
+      projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.push(newDay);
     }
 
     function addNewTask(dayIndex, task) {
-      const selectedDay = selectedMonth.value.days.find(el => el.dayIndex === dayIndex);
+      const selectedDay = projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.find(el => el.dayNr === dayIndex);
       selectedDay.doneTasks.push(task)
     }
 
@@ -133,59 +123,72 @@ export default {
     function backToProjectList() {
       isBackButtonActive.value = false;
       listMode.value = 'projectsMode';
-      selectedProject.value = {cardName: '--', id: 0, months: [{monthName: '--', days: []}]};
-      selectedMonth.value = {monthName: '--', days: []};
     }
 
     const projectsListEditMode = ref(false);
-    const daysListEditMode = ref(false);
 
     function projectsListEditModeToggle() {
       projectsListEditMode.value = !projectsListEditMode.value;
     }
 
-    function daysListEditModeToggle() {
-      daysListEditMode.value = !daysListEditMode.value
-    }
 
-
-    const selectedMonth = ref({monthName: 'Month', days: []});
     const otherProjectMonths = ref(null);
 
     const headerName = computed(function () {
       if (listMode.value === 'projectsMode') {
         return 'Projects';
       } else {
-        return selectedProject.value.cardName;
+        return projectsList.value[selectedProjectIndex.value].cardName;
       }
-    })
+    });
 
-    const headerMonth = computed(function () {
-      return selectedMonth.value.monthName;
-    })
+    const selectedMonth = computed(function () {
+      if (projectsList.value[selectedProjectIndex.value] && projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value]) {
+        return projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value];
+      } else return {}
+    });
 
-    function changeMonth(newMonthName) {
-      selectedMonth.value = selectedProject.value.months.find(el => el.monthName === newMonthName);
+
+    function changeMonth(monthID) {
+      selectedMonthIndex.value = projectsList.value[selectedProjectIndex.value].months.findIndex(el => el.id.toString() === monthID);
       setOtherMonths()
     }
 
     function changeMonthName(newName) {
-      selectedMonth.value.monthName = newName;
+      projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].monthName = newName;
+    }
+
+    function addMonth() {
+      const id = Date.now();
+      const newMonth = {
+        monthName: 'month',
+        id: id,
+        days: []
+      };
+      projectsList.value[selectedProjectIndex.value].months.push(newMonth);
+      setOtherMonths();
+    }
+
+    function deleteMonth(id) {
+      const index = projectsList.value[selectedProjectIndex.value].months.findIndex(el => el.id === id)
+      projectsList.value[selectedProjectIndex.value].months.splice(index, 1)
+      selectedMonthIndex.value = projectsList.value[selectedProjectIndex.value].months.length - 1;
+      setOtherMonths()
     }
 
     function setOtherMonths() {
-      const selectedMonthIndex = selectedProject.value.months.indexOf(selectedMonth.value)
-      otherProjectMonths.value = [...selectedProject.value.months]
-      otherProjectMonths.value.splice(selectedMonthIndex, 1)
+      const monthIndex = projectsList.value[selectedProjectIndex.value].months.indexOf(projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value])
+      otherProjectMonths.value = [...projectsList.value[selectedProjectIndex.value].months]
+      otherProjectMonths.value.splice(monthIndex, 1)
     }
 
 
     return {
       projectsList,
+      selectedProjectIndex,
+      selectedMonthIndex,
 
       listMode,
-      selectedProject,
-      selectedMonth,
       projectCardClicked,
       editProjectName,
 
@@ -193,6 +196,7 @@ export default {
       deleteProject,
 
       addNewDay,
+
       addNewTask,
 
       isBackButtonActive,
@@ -200,14 +204,14 @@ export default {
 
       projectsListEditMode,
       projectsListEditModeToggle,
-      daysListEditMode,
-      daysListEditModeToggle,
 
       headerName,
-      headerMonth,
+      selectedMonth,
       otherProjectMonths,
       changeMonth,
-      changeMonthName
+      changeMonthName,
+      addMonth,
+      deleteMonth
     }
   }
 }
@@ -220,7 +224,7 @@ export default {
   margin-left: 45px;
 }
 
-.listMainSection {
+.list-main-section {
   display: flex;
   align-items: center;
 }

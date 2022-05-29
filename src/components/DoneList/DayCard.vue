@@ -19,12 +19,11 @@ export default {
   props: {
     dayNr: Number,
     doneTasks: Array,
-    isDaysListEditModeOn: Boolean
   },
   setup(props, context) {
 
     function addNewTask(e) {
-      context.emit('day-add-task', props.dayNr, e.target.innerHTML);
+      context.emit('day-add-task', props.dayNr, e.target.innerText);
 
       e.target.innerHTML = null;
       e.preventDefault();
