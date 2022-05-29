@@ -1,8 +1,8 @@
 <template>
-  <div class="dayCardBody" @click="cardClicked">
+  <div class="day-card-body" @click="cardClicked">
     <h1>{{ dayNr }}</h1>
 
-    <div class="listWrapper">
+    <div class="list-wrapper">
       <ul>
         <li v-for="task in doneTasks" :key="task">{{ task }}</li>
       </ul>
@@ -25,6 +25,7 @@ export default {
 
     function addNewTask(e) {
       context.emit('day-add-task', props.dayNr, e.target.innerHTML);
+
       e.target.innerHTML = null;
       e.preventDefault();
     }
@@ -39,9 +40,9 @@ export default {
 </script>
 
 <style scoped>
-.dayCardBody {
-  min-width: 300px;
-  max-width: 550px;
+.day-card-body {
+  min-width: 250px;
+  max-width: 500px;
   min-height: 240px;
   display: flex;
   flex-direction: column;
@@ -78,12 +79,12 @@ li {
   transition: 150ms;
 }
 
-.dayCardBody:hover .textarea {
+.day-card-body:hover .textarea {
   opacity: 1;
 }
 
 
-.listWrapper {
+.list-wrapper {
   width: 100%;
 }
 

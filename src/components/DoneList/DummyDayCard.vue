@@ -21,7 +21,7 @@ export default {
 
 <style scoped>
 .body {
-  min-width: 300px;
+  min-width: 250px;
   max-width: 500px;
   min-height: 240px;
   display: flex;
