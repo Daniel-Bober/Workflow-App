@@ -42,6 +42,7 @@
             :done-tasks="day.doneTasks"
             @add-done-task="addNewTask"
             @delete-done-task="deleteTask"
+            @delete-day="deleteDay"
         ></DayCard>
         <DummyDayCard
             v-if="selectedMonth.days.length < 31"
@@ -113,6 +114,11 @@ export default {
       projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.push(newDay);
     }
 
+    function deleteDay(dayNr) {
+      projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.splice(dayNr - 1, 1)
+
+    }
+
 
     function addNewTask(dayIndex, task) {
       const selectedDay = projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.find(el => el.dayNr === dayIndex);
@@ -120,8 +126,8 @@ export default {
     }
 
     function deleteTask(dayIndex, taskIndex) {
-      const selectedDay = projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.find(el => el.dayNr === dayIndex);
-      selectedDay.doneTasks.splice(taskIndex, 1)
+      const selectedTask = projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.find(el => el.dayNr === dayIndex);
+      selectedTask.doneTasks.splice(taskIndex, 1)
     }
 
 
@@ -203,6 +209,7 @@ export default {
       deleteProject,
 
       addNewDay,
+      deleteDay,
 
       addNewTask,
       deleteTask,

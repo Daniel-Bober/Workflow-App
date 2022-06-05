@@ -14,16 +14,33 @@
 
     <span class="textarea" role="textbox" contenteditable spellcheck="false" @keydown.enter="addNewTask"></span>
 
+
+    <img alt="bin-icon" class="bin-icon" src="../../assets/icons/bin.svg" @click="openDeleteCheck">
+
+    <div :class="deleteCheckClassName">
+      <h2>Delete this day?</h2>
+      <div class="check-icons">
+        <img alt="accept-icon" src="../../assets/icons/done.svg" @click="deleteDay">
+        <img alt="cancel-icon" src="../../assets/icons/delete.svg" @click="closeDeleteCheck">
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
+import {computed, ref} from "vue";
+
 export default {
   props: {
     dayNr: Number,
     doneTasks: Array,
   },
   setup(props, context) {
+
+    function deleteDay() {
+      context.emit('delete-day', props.dayNr)
+    }
 
     function addNewTask(e) {
       context.emit('add-done-task', props.dayNr, e.target.innerText);
@@ -33,12 +50,37 @@ export default {
     }
 
     function deleteTask(index) {
-      context.emit("delete-done-task", props.dayNr, index)
+      context.emit('delete-done-task', props.dayNr, index)
+    }
+
+
+    const isDeleteModeOn = ref(false);
+
+    const deleteCheckClassName = computed(function () {
+      return isDeleteModeOn.value ? 'delete-check active' : 'delete-check';
+    });
+
+    // const deleteModeClickBlockadeClassName = computed(function () {
+    //   return isDeleteModeOn.value ? 'click-blockade active' : 'click-blockade'
+    // })
+
+    function openDeleteCheck() {
+      isDeleteModeOn.value = true;
+    }
+
+    function closeDeleteCheck() {
+      isDeleteModeOn.value = false;
     }
 
     return {
+      deleteDay,
+
       addNewTask,
-      deleteTask
+      deleteTask,
+
+      deleteCheckClassName,
+      openDeleteCheck,
+      closeDeleteCheck
 
     }
   }
@@ -50,6 +92,7 @@ export default {
   min-width: 250px;
   max-width: 500px;
   min-height: 240px;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -128,6 +171,70 @@ li {
 .delete-icon:active img {
   transform: scale(1.05);
   transition: 100ms;
+}
+
+.bin-icon {
+  width: 15px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  opacity: 0;
+  transition: 150ms;
+  cursor: pointer;
+}
+
+.bin-icon:hover {
+  transform: scale(1.12);
+}
+
+.bin-icon:active {
+  transform: scale(1.05);
+  transition: 100ms;
+}
+
+.day-card-body:hover .bin-icon {
+  opacity: 1;
+}
+
+.delete-check {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+.delete-check.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.check-icons {
+  width: 85px;
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.check-icons img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: 150ms;
+}
+
+.check-icons img:hover {
+  transform: scale(1.15);
+}
+
+.check-icons img:active {
+  transform: scale(1.05);
 }
 
 div::-webkit-scrollbar {
