@@ -4,7 +4,10 @@
 
     <div class="list-wrapper">
       <ul>
-        <li v-for="task in doneTasks" :key="task">{{ task }}</li>
+        <div class="task" v-for="(task, index) in doneTasks" :key="task">
+          <li>{{ task }}</li>
+          <div class="delete-icon" @click="deleteTask(index)"><img src="../../assets/icons/delete.svg" alt="delete-icon"></div>
+        </div>
       </ul>
     </div>
 
@@ -23,15 +26,19 @@ export default {
   setup(props, context) {
 
     function addNewTask(e) {
-      context.emit('day-add-task', props.dayNr, e.target.innerText);
+      context.emit('add-done-task', props.dayNr, e.target.innerText);
 
       e.target.innerHTML = null;
       e.preventDefault();
     }
 
+    function deleteTask(index) {
+      context.emit("delete-done-task", props.dayNr, index)
+    }
 
     return {
-      addNewTask
+      addNewTask,
+      deleteTask
 
     }
   }
@@ -61,7 +68,7 @@ h1 {
 }
 
 li {
-  margin-right: 20px;
+  margin-right: 40px;
   margin-bottom: 10px;
 }
 
@@ -85,6 +92,42 @@ li {
 
 .list-wrapper {
   width: 100%;
+}
+
+.task {
+  width: 100%;
+  position: relative;
+  border-bottom: 2px solid transparent;
+  transition: 100ms;
+}
+
+.task:hover {
+  border-bottom: 2px solid rgba(100, 100, 100, 0.1);
+}
+
+.task:hover .delete-icon {
+  opacity: 1;
+}
+
+.delete-icon {
+  width: 15px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1;
+  opacity: 0;
+}
+
+.delete-icon:hover img {
+  transform: scale(1.15);
+  transition: 150ms;
+}
+
+.delete-icon:active img {
+  transform: scale(1.05);
+  transition: 100ms;
 }
 
 div::-webkit-scrollbar {
