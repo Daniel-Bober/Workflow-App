@@ -39,13 +39,13 @@ export default {
   },
   methods: {
     saveInputName(e) {
-      this.nameInput = e.target.innerHTML
+      this.nameInput = e.target.innerText
       if (this.nameInput !== this.taskName) {
         this.$emit('change-task-name', this.id, this.nameInput);
       }
     },
     inputBlur(e) {
-      this.nameInput = e.target.innerHTML
+      this.nameInput = e.target.innerText
       e.target.blur();
     },
     openDeleteCheck() {
