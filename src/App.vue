@@ -1,18 +1,18 @@
 <template>
   <section>
-    <DoneList></DoneList>
-    <ToDoList></ToDoList>
+    <TheDoneList></TheDoneList>
+    <TheToDoList></TheToDoList>
   </section>
 </template>
 
 <script>
-import DoneList from "@/components/DoneList/TheDoneList";
-import ToDoList from "@/components/ToDoList/TheToDoList";
+import TheDoneList from "@/components/DoneList/TheDoneList";
+import TheToDoList from "@/components/ToDoList/TheToDoList";
 
 
 export default {
   components: {
-    DoneList, ToDoList
+    TheDoneList, TheToDoList
   }
 };
 </script>
