@@ -1,5 +1,5 @@
 <template>
-  <div class="day-card-body" @click="cardClicked">
+  <div :class="dayCardClassName" @click="cardClicked">
     <h1>{{ dayNr }}</h1>
 
     <div class="list-wrapper">
@@ -34,9 +34,19 @@ import {computed, ref} from "vue";
 export default {
   props: {
     dayNr: Number,
+    daysArrayLength: Number,
     doneTasks: Array,
   },
   setup(props, context) {
+
+    const isLast = computed(function () {
+      return props.daysArrayLength - props.dayNr === 0;
+    });
+
+    const dayCardClassName = computed(function () {
+      return isLast.value ? 'day-card-body last' : 'day-card-body'
+    })
+
 
     function deleteDay() {
       context.emit('delete-day', props.dayNr)
@@ -73,6 +83,8 @@ export default {
     }
 
     return {
+      dayCardClassName,
+
       deleteDay,
 
       addNewTask,
@@ -178,9 +190,11 @@ li {
   position: absolute;
   top: 15px;
   left: 15px;
-  opacity: 0;
-  transition: 150ms;
   cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: 150ms;
+
 }
 
 .bin-icon:hover {
@@ -192,8 +206,9 @@ li {
   transition: 100ms;
 }
 
-.day-card-body:hover .bin-icon {
+.day-card-body.last:hover .bin-icon {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .delete-check {

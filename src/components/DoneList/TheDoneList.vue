@@ -39,6 +39,7 @@
             v-for="day in selectedMonth.days"
             :key="day.dayIndex"
             :day-nr="day.dayNr"
+            :days-array-length="selectedMonth.days.length"
             :done-tasks="day.doneTasks"
             @add-done-task="addNewTask"
             @delete-done-task="deleteTask"
