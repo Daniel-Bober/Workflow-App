@@ -71,7 +71,6 @@ export default {
   components: {DoneHeader, TheProjectsList, ProjectCard, TheDaysList, DayCard, DummyDayCard, DummyProjectCard},
 
   setup() {
-    // const doneListData = ref(JSON.parse(localStorage.getItem("doneListData")))
     const projectsList = ref([])
 
     const selectedProjectIndex = ref(null);
@@ -245,35 +244,3 @@ export default {
   align-items: center;
 }
 </style>
-
-<!--[{cardName: 'Squared', id: 1,}, {cardName: 'Portfolio', id: 2}, {-->
-<!--cardName: 'Portfolio',-->
-<!--id: 3-->
-<!--}, {-->
-<!--cardName: 'Portfolio',-->
-<!--id: 4,-->
-<!--months: [{-->
-<!--monthName: 'Maj', days: []-->
-<!--}, {-->
-<!--monthName: 'Czerwiec', days: [-->
-<!--{dayIndex: 1, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--{dayIndex: 2, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--{dayIndex: 3, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--{dayIndex: 4, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--{dayIndex: 5, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--{dayIndex: 6, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--{dayIndex: 7, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--{dayIndex: 8, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--{dayIndex: 9, doneTasks: ['coś', 'coś innego', 'jeszcze jedno', 'nic']},-->
-<!--]-->
-<!--}]-->
-<!--}, {cardName: 'Portfolio', id: 5}, {-->
-<!--cardName: 'Kolejny projekt',-->
-<!--id: 6-->
-<!--}, {cardName: 'jeszcze jeden', id: 7}, {cardName: 'Nazwa', id: 8}, {-->
-<!--cardName: 'Squared',-->
-<!--id: 9-->
-<!--},-->
-<!--{cardName: 'Jeszcze jeden', id: 10}, {cardName: 'Burgir', id: 11}, {cardName: 'Burgir', id: 12}-->
-<!--, {cardName: 'Burgir', id: 13}, {cardName: 'Burgir', id: 14}, {cardName: 'Burgir', id: 15}-->
-<!--, {cardName: 'Burgir', id: 16}, {cardName: 'Burgir', id: 17}]-->
