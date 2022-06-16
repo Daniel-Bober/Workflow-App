@@ -77,21 +77,12 @@ export default {
     const selectedMonthIndex = ref(null);
     const listMode = ref('projectsMode');
 
-    function projectCardClicked(id) {
-      selectedProjectIndex.value = projectsList.value.findIndex(el => el.id === id);
-      selectedMonthIndex.value = projectsList.value[selectedProjectIndex.value].months.length - 1;
 
-      setOtherMonths()
-
-      isBackButtonActive.value = true;
-      listMode.value = 'daysMode'
-    }
-
-
+    /*region project card*/
     function addNewProject() {
       const id = Date.now();
       const newProject = {
-        cardName: 'new',
+        cardName: 'project name',
         id: id,
         months: [{monthName: 'month', id: id + 1, days: []}]
       };
@@ -108,7 +99,26 @@ export default {
       projectsList.value[index].cardName = newName;
     }
 
+    function projectCardClicked(id) {
+      selectedProjectIndex.value = projectsList.value.findIndex(el => el.id === id);
+      selectedMonthIndex.value = projectsList.value[selectedProjectIndex.value].months.length - 1;
 
+      setOtherMonths()
+
+      isBackButtonActive.value = true;
+      listMode.value = 'daysMode'
+    }
+
+    const projectsListEditMode = ref(false);
+
+    function projectsListEditModeToggle() {
+      projectsListEditMode.value = !projectsListEditMode.value;
+    }
+
+    /*endregion*/
+
+
+    /*region day card*/
     function addNewDay() {
       const newDay = {dayNr: (projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.length + 1), doneTasks: []};
       projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.push(newDay);
@@ -130,23 +140,10 @@ export default {
       selectedTask.doneTasks.splice(taskIndex, 1)
     }
 
-
-    const isBackButtonActive = ref(false);
-
-    function backToProjectList() {
-      isBackButtonActive.value = false;
-      listMode.value = 'projectsMode';
-    }
-
-    const projectsListEditMode = ref(false);
-
-    function projectsListEditModeToggle() {
-      projectsListEditMode.value = !projectsListEditMode.value;
-    }
+    /*endregion*/
 
 
-    const otherProjectMonths = ref(null);
-
+    /*region header */
     const headerName = computed(function () {
       if (listMode.value === 'projectsMode') {
         return 'Projects';
@@ -155,21 +152,12 @@ export default {
       }
     });
 
+
     const selectedMonth = computed(function () {
       if (projectsList.value[selectedProjectIndex.value] && projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value]) {
         return projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value];
       } else return {}
     });
-
-
-    function changeMonth(monthID) {
-      selectedMonthIndex.value = projectsList.value[selectedProjectIndex.value].months.findIndex(el => el.id.toString() === monthID);
-      setOtherMonths()
-    }
-
-    function changeMonthName(newName) {
-      projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].monthName = newName;
-    }
 
     function addMonth() {
       const id = Date.now();
@@ -189,44 +177,60 @@ export default {
       setOtherMonths()
     }
 
+
+    function changeMonthName(newName) {
+      projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].monthName = newName;
+    }
+
+    function changeMonth(monthID) {
+      selectedMonthIndex.value = projectsList.value[selectedProjectIndex.value].months.findIndex(el => el.id.toString() === monthID);
+      setOtherMonths()
+    }
+
+    const otherProjectMonths = ref(null);
+
     function setOtherMonths() {
       const monthIndex = projectsList.value[selectedProjectIndex.value].months.indexOf(projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value])
       otherProjectMonths.value = [...projectsList.value[selectedProjectIndex.value].months]
       otherProjectMonths.value.splice(monthIndex, 1)
     }
 
+    const isBackButtonActive = ref(false);
+
+    function backToProjectList() {
+      isBackButtonActive.value = false;
+      listMode.value = 'projectsMode';
+    }
+
+    /*endregion*/
+
 
     return {
       projectsList,
       selectedProjectIndex,
       selectedMonthIndex,
-
       listMode,
-      projectCardClicked,
-      editProjectName,
-
-      addNewProject,
-      deleteProject,
-
-      addNewDay,
-      deleteDay,
-
-      addNewTask,
-      deleteTask,
-
-      isBackButtonActive,
-      backToProjectList,
-
       projectsListEditMode,
       projectsListEditModeToggle,
+
+      projectCardClicked,
+      editProjectName,
+      addNewProject,
+      deleteProject,
+      addNewDay,
+      deleteDay,
+      addNewTask,
+      deleteTask,
 
       headerName,
       selectedMonth,
       otherProjectMonths,
+      addMonth,
+      deleteMonth,
       changeMonth,
       changeMonthName,
-      addMonth,
-      deleteMonth
+      isBackButtonActive,
+      backToProjectList
     }
   }
 }

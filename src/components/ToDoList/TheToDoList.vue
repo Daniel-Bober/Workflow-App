@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       mainListElements: JSON.parse(localStorage.getItem('ToDoListData')) ? JSON.parse(localStorage.getItem('ToDoListData')) : [],
-      todoHeader: 'Projects',
+      todoHeader: 'To do',
       selectedComponents: 'Projects',
       selectedTasksList: [],
       todoDeleteMode: false,
