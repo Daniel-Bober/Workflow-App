@@ -34,18 +34,18 @@ export default {
   },
   computed: {
     classNameToggle() {
-      return this.isDeleteModeOn ? 'task-body edit-mode' : 'task-body'
+      return this.isDeleteModeOn ? 'task-body edit-mode' : 'task-body';
     }
   },
   methods: {
     saveInputName(e) {
-      this.nameInput = e.target.innerText
+      this.nameInput = e.target.innerText;
       if (this.nameInput !== this.taskName) {
         this.$emit('change-task-name', this.id, this.nameInput);
       }
     },
     inputBlur(e) {
-      this.nameInput = e.target.innerText
+      this.nameInput = e.target.innerText;
       e.target.blur();
     },
     openDeleteCheck() {
@@ -57,10 +57,11 @@ export default {
       this.$emit('delete-mode-off');
     },
     taskCompleted() {
-      this.$emit('task-completed', this.id)
+      this.$emit('task-completed', this.id);
+      this.deleteTask();
     },
     deleteTask() {
-      this.$emit('delete-task', this.id)
+      this.$emit('delete-task', this.id);
     }
   }
 }
