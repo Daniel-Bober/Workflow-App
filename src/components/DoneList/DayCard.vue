@@ -23,6 +23,10 @@
       </div>
     </div>
 
+    <div class="done-tasks-list-icon" @click="openDoneTasksList">
+      <img src="../../assets/icons/stripes_menu.svg" alt="done-tasks-list-icon">
+    </div>
+
   </div>
 </template>
 
@@ -77,6 +81,11 @@ export default {
       isDeleteModeOn.value = false;
     }
 
+
+    function openDoneTasksList() {
+      context.emit('open-done-tasks-list')
+    }
+
     return {
       dayCardClassName,
 
@@ -87,8 +96,9 @@ export default {
 
       deleteCheckClassName,
       openDeleteCheck,
-      closeDeleteCheck
+      closeDeleteCheck,
 
+      openDoneTasksList
     }
   }
 }
@@ -247,8 +257,27 @@ li {
   transform: scale(1.05);
 }
 
-div::-webkit-scrollbar {
-  display: none;
+.done-tasks-list-icon {
+  width: 24px;
+  position: absolute;
+  bottom: 10px;
+  right: 30px;
+  cursor: pointer;
+  opacity: 0;
+  transition: 150ms;
+}
+
+.day-card-body:hover .done-tasks-list-icon {
+  opacity: 1;
+}
+
+.done-tasks-list-icon:hover {
+  transform: scale(1.09);
+}
+
+.done-tasks-list-icon:active {
+  transform: scale(1.04);
+  transition: 100ms;
 }
 
 </style>
