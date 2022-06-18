@@ -82,7 +82,6 @@ export default {
       todoEditMode: false,
       isBackButtonActive: false,
       actualOpenTaskMenu: null,
-
       lastSelectedElement: null
     }
   },
@@ -91,10 +90,9 @@ export default {
     todoOffEditModeClassName() {
       return this.todoDeleteMode ? 'todo-off-delete-mode-btn active' : 'todo-off-delete-mode-btn';
     },
-    // eslint-disable-next-line vue/return-in-computed-property
+
     isInProjectPage() {
-      if (this.selectedComponents === 'Projects') return true;
-      else if (this.selectedComponents === 'Tasks') return false;
+      return this.selectedComponents === 'Projects';
     }
   },
 
@@ -129,7 +127,6 @@ export default {
     editContainerName(id, newName) {
       this.findElement(this.mainListElements, id).name = newName;
       this.saveToDoListData();
-      //this.containerEditToggle()
     },
 
     editTaskName(id, newName) {
@@ -141,21 +138,19 @@ export default {
     todoOnDeleteMode() {
       this.todoDeleteMode = true;
     },
-
     todoOffDeleteMode() {
       this.todoDeleteMode = false;
 
     },
 
     deleteProject(id) {
-      const taskIndex = this.mainListElements.findIndex(el => el.id === id);
-      this.mainListElements.splice(taskIndex, 1)
+      const projectIndex = this.mainListElements.findIndex(el => el.id === id);
+      this.mainListElements.splice(projectIndex, 1)
       this.todoOffDeleteMode()
       this.saveToDoListData()
     },
 
     deleteTask(id) {
-
       const taskIndex = this.selectedTasksList.findIndex(el => el.id === id);
       this.selectedTasksList.splice(taskIndex, 1)
       this.todoOffDeleteMode()
@@ -168,7 +163,6 @@ export default {
     todoOpenTasksList(id) {
       if (!this.todoDeleteMode) {
         this.lastSelectedElement = this.findElement(this.mainListElements, id);
-
         this.selectedComponents = 'Tasks';
         this.selectedTasksList = this.lastSelectedElement.insideElements;
         this.todoHeader = this.lastSelectedElement.name
@@ -204,8 +198,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  /*background-color: rgba(159, 159, 159, 0.1);*/
 }
 
 .todo-off-delete-mode-btn {
