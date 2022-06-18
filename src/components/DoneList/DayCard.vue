@@ -11,9 +11,7 @@
       </ul>
     </div>
 
-
     <span class="textarea" role="textbox" contenteditable spellcheck="false" @keydown.enter="addNewTask"></span>
-
 
     <img alt="bin-icon" class="bin-icon" src="../../assets/icons/bin.svg" @click="openDeleteCheck">
 
@@ -70,9 +68,6 @@ export default {
       return isDeleteModeOn.value ? 'delete-check active' : 'delete-check';
     });
 
-    // const deleteModeClickBlockadeClassName = computed(function () {
-    //   return isDeleteModeOn.value ? 'click-blockade active' : 'click-blockade'
-    // })
 
     function openDeleteCheck() {
       isDeleteModeOn.value = true;
