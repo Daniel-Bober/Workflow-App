@@ -2,7 +2,7 @@
   <div :class="classNameToggle">
     <div class="container-head" @click="clickElement">
 
-      <input v-model="nameInput" placeholder="Project Name" type="text" @blur="saveInputName"
+      <input v-model="nameInput" placeholder="Project Name" spellcheck="false" type="text" @blur="saveInputName"
              @keydown.enter="inputBlur">
       <div><h1>{{ elInside }}</h1></div>
       <div class="bin-icon" @click="openDeleteCheck"><img alt="bin-icon" src="../../assets/icons/bin.svg"></div>
@@ -35,16 +35,14 @@ export default {
     isEditModeOn: Boolean
   },
   computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
     classNameToggle() {
       if (!this.isEditModeOn && !this.isDeleteModeOn) {
         return 'container-body';
-
       } else if (this.isEditModeOn && !this.isDeleteModeOn) {
         return 'container-body edit-mode';
       } else if (this.isEditModeOn && this.isDeleteModeOn) {
         return 'container-body edit-mode delete-mode';
-      } else if (!this.isEditModeOn && this.isDeleteModeOn) {
+      } else {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.isDeleteModeOn = false;
         return 'container-body';
