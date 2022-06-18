@@ -20,13 +20,13 @@ export default {
 <style>
 * {
   box-sizing: border-box;
-  --offWhite: rgb(185, 185, 185);
+  --offWhite: rgb(200, 200, 200);
   --mainGrdC1: rgb(47, 90, 218);
   --mainGrdC2: rgb(211, 105, 105);
 }
 
 body {
-  background: rgb(18, 18, 18);
+  background: rgb(20, 20, 20);
   font-family: Palanquin, serif;
   color: var(--offWhite);
   margin: 0;
