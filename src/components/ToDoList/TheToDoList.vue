@@ -156,8 +156,12 @@ export default {
       this.todoOffDeleteMode()
       this.saveToDoListData()
     },
-    sendTaskToDoneList() {
-      //Wysyłanie do listy zrobionych
+    sendTaskToDoneList(id) {
+      const taskIndex = this.selectedTasksList.findIndex(el => el.id === id);
+      const doneTask = this.selectedTasksList[taskIndex];
+      if (doneTask.name !== '') {
+        this.$store.dispatch('addDoneTask', doneTask);
+      }
     },
 
     todoOpenTasksList(id) {
