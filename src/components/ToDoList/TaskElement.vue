@@ -89,7 +89,7 @@ h1 {
   margin: 15px 0;
   position: relative;
   transition: 200ms;
-  background-color: rgba(200, 200, 200, 0.1);
+  background-color: var(--gray);
 }
 
 .task-head {

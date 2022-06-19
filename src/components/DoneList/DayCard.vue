@@ -114,7 +114,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(200, 200, 200, 0.1);;
+  background-color: var(--gray);
   break-inside: avoid;
   margin-bottom: 20px;
 }

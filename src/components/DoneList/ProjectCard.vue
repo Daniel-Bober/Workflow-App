@@ -147,7 +147,7 @@ export default {
   transition: 150ms;
   cursor: pointer;
   border: 1px solid transparent;
-  background-color: rgba(200, 200, 200, 0.1);;
+  background-color: var(--gray);
 }
 
 .body:not(.edit-mode):hover {
