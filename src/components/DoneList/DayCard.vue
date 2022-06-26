@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="done-tasks-list-icon" @click="openDoneTasksList">
+    <div class="done-tasks-list-icon" @click="openWaitingTasksList">
       <img src="../../assets/icons/stripes_menu.svg" alt="done-tasks-list-icon">
     </div>
 
@@ -82,8 +82,8 @@ export default {
     }
 
 
-    function openDoneTasksList() {
-      context.emit('open-done-tasks-list')
+    function openWaitingTasksList() {
+      context.emit('open-waiting-tasks-list', props.dayNr);
     }
 
     return {
@@ -98,7 +98,7 @@ export default {
       openDeleteCheck,
       closeDeleteCheck,
 
-      openDoneTasksList
+      openWaitingTasksList
     }
   }
 }
