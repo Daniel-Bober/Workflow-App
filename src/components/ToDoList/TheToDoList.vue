@@ -36,7 +36,7 @@
             @delete-mode-on="todoOnDeleteMode"
             @delete-mode-off="todoOffDeleteMode"
             @delete-task="deleteTask"
-            @task-completed="sendTaskToDoneList"
+            @task-completed="sendTaskToWaitingList"
         ></TaskElement>
 
         <ToDoDummy
@@ -74,7 +74,8 @@ export default {
 
   data() {
     return {
-      mainListElements: JSON.parse(localStorage.getItem('ToDoListData')) ? JSON.parse(localStorage.getItem('ToDoListData')) : [],
+      // mainListElements: JSON.parse(localStorage.getItem('ToDoListData')) ? JSON.parse(localStorage.getItem('ToDoListData')) : [],
+      mainListElements: JSON.parse(localStorage.getItem('ToDoListData')) ?? [],
       todoHeader: 'To do',
       selectedComponents: 'Projects',
       selectedTasksList: [],
@@ -140,7 +141,6 @@ export default {
     },
     todoOffDeleteMode() {
       this.todoDeleteMode = false;
-
     },
 
     deleteProject(id) {
@@ -156,11 +156,14 @@ export default {
       this.todoOffDeleteMode()
       this.saveToDoListData()
     },
-    sendTaskToDoneList(id) {
+    sendTaskToWaitingList(id) {
       const taskIndex = this.selectedTasksList.findIndex(el => el.id === id);
       const doneTask = this.selectedTasksList[taskIndex];
-      if (doneTask.name !== '') {
-        this.$store.dispatch('addDoneTask', doneTask);
+
+      const taskWithoutSpaces = doneTask.name.replace(/\s/g, '');
+      if (taskWithoutSpaces !== '') {
+        this.$store.dispatch('addWaitingTask', doneTask.name);
+        this.$store.dispatch('saveWaitingTasksListData');
       }
     },
 
