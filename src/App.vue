@@ -18,6 +18,11 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: 'popins';
+  src: url(fonts/Poppins-Light.ttf);
+}
+
 * {
   box-sizing: border-box;
   --offWhite: rgb(203, 201, 201);
@@ -28,7 +33,7 @@ export default {
 
 body {
   background: rgb(20, 20, 20);
-  font-family: Palanquin, serif;
+  font-family: 'Poppins', serif;
   color: var(--offWhite);
   margin: 0;
   overflow: hidden;
