@@ -129,7 +129,6 @@ export default {
     function projectsListEditModeToggle() {
       projectsListEditMode.value = !projectsListEditMode.value;
     }
-
     /*endregion*/
 
 
