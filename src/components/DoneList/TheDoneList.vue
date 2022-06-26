@@ -44,6 +44,7 @@
             @add-done-task="addNewTask"
             @delete-done-task="deleteTask"
             @delete-day="deleteDay"
+            @open-waiting-tasks-list="openWaitingTasksList"
         ></DayCard>
         <DummyDayCard
             v-if="selectedMonth.days.length < 31"
@@ -52,6 +53,11 @@
       </TheDaysList>
     </div>
 
+    <TheWaitingTasksList
+        :is-list-open="isWaitingTasksListOpen"
+        @add-tasks="addTasksFromWaitingList"
+        @close-list="closeWaitingTasksList"
+    ></TheWaitingTasksList>
   </div>
 </template>
 
@@ -65,13 +71,16 @@ import TheDaysList from "@/components/DoneList/TheDaysList";
 import DayCard from "@/components/DoneList/DayCard";
 import DummyDayCard from "@/components/DoneList/DummyDayCard";
 import DummyProjectCard from "@/components/DoneList/DummyProjectCard";
+import TheWaitingTasksList from "@/components/DoneList/WaitingTasksList/TheWaitingTasksList";
+import {useStore} from "vuex";
 
 export default {
 
-  components: {DoneHeader, TheProjectsList, ProjectCard, TheDaysList, DayCard, DummyDayCard, DummyProjectCard},
+  components: {DoneHeader, TheProjectsList, ProjectCard, TheDaysList, DayCard, DummyDayCard, DummyProjectCard, TheWaitingTasksList},
 
   setup() {
-    const projectsList = ref([])
+    const store = useStore()
+    const projectsList = ref(JSON.parse(localStorage.getItem('doneTasksList')) ?? [])
 
     const selectedProjectIndex = ref(null);
     const selectedMonthIndex = ref(null);
@@ -87,16 +96,22 @@ export default {
         months: [{monthName: 'month', id: id + 1, days: []}]
       };
       projectsList.value.push(newProject);
+
+      saveDoneTasksListData()
     }
 
     function deleteProject(id) {
       const index = projectsList.value.findIndex(el => el.id === id);
       projectsList.value.splice(index, 1)
+
+      saveDoneTasksListData()
     }
 
     function editProjectName(id, newName) {
       const index = projectsList.value.findIndex(el => el.id === id);
       projectsList.value[index].cardName = newName;
+
+      saveDoneTasksListData()
     }
 
     function projectCardClicked(id) {
@@ -122,22 +137,41 @@ export default {
     function addNewDay() {
       const newDay = {dayNr: (projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.length + 1), doneTasks: []};
       projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.push(newDay);
+
+      saveDoneTasksListData()
     }
 
     function deleteDay(dayNr) {
       projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.splice(dayNr - 1, 1)
 
+      saveDoneTasksListData()
     }
 
 
-    function addNewTask(dayIndex, task) {
-      const selectedDay = projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.find(el => el.dayNr === dayIndex);
+    function addNewTask(dayNr, task) {
+      const selectedDay = projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days[dayNr - 1];
       selectedDay.doneTasks.push(task)
+
+      saveDoneTasksListData()
     }
 
     function deleteTask(dayIndex, taskIndex) {
       const selectedTask = projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days.find(el => el.dayNr === dayIndex);
       selectedTask.doneTasks.splice(taskIndex, 1)
+
+      saveDoneTasksListData()
+    }
+
+
+    const selectedDayNr = ref(null);
+
+    function openWaitingTasksList(dayNr) {
+      selectedDayNr.value = dayNr;
+      isWaitingTasksListOpen.value = true;
+    }
+
+    function closeWaitingTasksList() {
+      isWaitingTasksListOpen.value = false;
     }
 
     /*endregion*/
@@ -168,6 +202,8 @@ export default {
       };
       projectsList.value[selectedProjectIndex.value].months.push(newMonth);
       setOtherMonths();
+
+      saveDoneTasksListData()
     }
 
     function deleteMonth(id) {
@@ -175,6 +211,8 @@ export default {
       projectsList.value[selectedProjectIndex.value].months.splice(index, 1)
       selectedMonthIndex.value = projectsList.value[selectedProjectIndex.value].months.length - 1;
       setOtherMonths()
+
+      saveDoneTasksListData()
     }
 
 
@@ -205,6 +243,29 @@ export default {
     /*endregion*/
 
 
+    /*region done tasks list*/
+    const isWaitingTasksListOpen = ref(false);
+
+    function addTasksFromWaitingList(selectedTasks) {
+
+      selectedTasks.forEach(nr => {
+        projectsList.value[selectedProjectIndex.value].months[selectedMonthIndex.value].days[selectedDayNr.value - 1].doneTasks.push(
+            store.state.waitingTasksList[nr]
+        );
+      })
+
+      closeWaitingTasksList();
+
+      store.dispatch('removeWaitingTasks', selectedTasks)
+      store.dispatch('saveWaitingTasksListData');
+    }
+
+    /*endregion*/
+
+    function saveDoneTasksListData() {
+      localStorage.setItem('doneTasksList', JSON.stringify(projectsList.value))
+    }
+
     return {
       projectsList,
       selectedProjectIndex,
@@ -221,6 +282,8 @@ export default {
       deleteDay,
       addNewTask,
       deleteTask,
+      openWaitingTasksList,
+      closeWaitingTasksList,
 
       headerName,
       selectedMonth,
@@ -230,7 +293,10 @@ export default {
       changeMonth,
       changeMonthName,
       isBackButtonActive,
-      backToProjectList
+      backToProjectList,
+
+      isWaitingTasksListOpen,
+      addTasksFromWaitingList
     }
   }
 }
@@ -240,7 +306,8 @@ export default {
 .done-list-area {
   width: 100%;
   height: 97vh;
-  margin-left: 45px;
+  padding-left: 45px;
+  position: relative;
 }
 
 .list-main-section {
