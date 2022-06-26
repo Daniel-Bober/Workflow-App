@@ -9,6 +9,7 @@
           ref="monthInput"
           :readonly="isReadOnly"
           :value="month.monthName"
+          spellcheck="false"
           @blur="changeMonthName"
           @keydown.enter="changeMonthName"
       >
@@ -54,7 +55,6 @@ export default {
   },
 
   setup(props, context) {
-
     const headerClassNameToggle = computed(function () {
       if (isMonthClicked.value && !isDeleteModeOn.value) {
         return 'body active';
@@ -63,7 +63,6 @@ export default {
       } else {
         return 'body';
       }
-
     });
 
 
