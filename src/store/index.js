@@ -7,7 +7,7 @@ import rootGetters from './actions'
 const store = createStore({
     state() {
         return {
-            doneTasksList: ['jakiś task']
+            waitingTasksList: JSON.parse(localStorage.getItem('waitingTasksList')) ?? []
         };
     },
     mutations: rootMutations,
