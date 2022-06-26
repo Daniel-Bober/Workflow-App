@@ -20,7 +20,8 @@ export default {
 <style>
 * {
   box-sizing: border-box;
-  --offWhite: rgb(200, 200, 200);
+  --offWhite: rgb(203, 201, 201);
+  --gray: rgb(41, 41, 41);
   --mainGrdC1: rgb(47, 90, 218);
   --mainGrdC2: rgb(211, 105, 105);
 }
