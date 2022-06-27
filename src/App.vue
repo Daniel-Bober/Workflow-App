@@ -19,7 +19,7 @@ export default {
 
 <style>
 @font-face {
-  font-family: 'popins';
+  font-family: 'Popins';
   src: url(fonts/Poppins-Light.ttf);
 }
 
