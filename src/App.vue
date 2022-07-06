@@ -19,8 +19,8 @@ export default {
 
 <style>
 @font-face {
-  font-family: 'Popins';
-  src: url(fonts/Poppins-Light.ttf);
+  font-family: 'palanquin';
+  src: url(fonts/palanquin.bold.ttf);
 }
 
 * {
@@ -33,7 +33,7 @@ export default {
 
 body {
   background: rgb(20, 20, 20);
-  font-family: 'Poppins', serif;
+  font-family: 'palanquin', serif;
   color: var(--offWhite);
   margin: 0;
   overflow: hidden;
