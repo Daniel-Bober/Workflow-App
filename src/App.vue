@@ -20,7 +20,7 @@ export default {
 <style>
 @font-face {
   font-family: 'palanquin';
-  src: url(fonts/palanquin.bold.ttf);
+  src: url(assets/fonts/palanquin.bold.ttf);
 }
 
 * {
