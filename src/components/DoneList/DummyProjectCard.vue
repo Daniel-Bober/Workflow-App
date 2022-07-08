@@ -1,6 +1,6 @@
 <template>
-  <div class="body">
-    <div class="plus-icon" @click="plusButton"><img alt="plus-icon" draggable="false" src="../../assets/icons/plus.svg">
+  <div class="body" @click="addProjectCard">
+    <div class="plus-icon"><img alt="plus-icon" draggable="false" src="../../assets/icons/plus.svg">
     </div>
   </div>
 </template>
@@ -8,12 +8,12 @@
 <script>
 export default {
   setup(_, context) {
-    function plusButton() {
+    function addProjectCard() {
       context.emit('add-new-project');
     }
 
     return {
-      plusButton
+      addProjectCard
     }
   }
 }
@@ -27,22 +27,21 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: 150ms;
+  cursor: pointer;
   border: 2px dashed rgb(100, 100, 100);
 }
 
 .plus-icon {
   width: 30px;
   height: 30px;
-  cursor: pointer;
-  transition: 200ms;
+  transition: 150ms;
 }
 
-.plus-icon:hover {
+.body:hover .plus-icon {
   transform: scale(1.17);
 }
 
-.plus-icon:active {
+.body:active .plus-icon {
   transform: scale(1.05);
   transition: 100ms;
 }
