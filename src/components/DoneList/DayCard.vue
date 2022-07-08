@@ -107,7 +107,6 @@ export default {
 <style scoped>
 .day-card-body {
   min-width: 250px;
-  max-width: 500px;
   min-height: 240px;
   position: relative;
   display: flex;
@@ -117,6 +116,7 @@ export default {
   background-color: var(--gray);
   break-inside: avoid;
   margin-bottom: 20px;
+  overflow: auto;
 }
 
 h1 {
@@ -128,7 +128,7 @@ h1 {
 }
 
 li {
-  margin-right: 40px;
+  margin-right: 50px;
   margin-bottom: 10px;
 }
 
@@ -139,13 +139,14 @@ li {
   min-width: 125px;
   max-width: 70%;
   min-height: 35px;
-  margin: 10px 0;
+  margin-top: 10px;
+  margin-bottom: 20px;
   border-bottom: 1px solid var(--offWhite);
   opacity: 0;
   transition: 150ms;
 }
 
-.day-card-body:hover .textarea {
+.day-card-body:hover .textarea, .textarea:focus {
   opacity: 1;
 }
 
