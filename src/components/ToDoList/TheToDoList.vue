@@ -76,7 +76,7 @@ export default {
     return {
       // mainListElements: JSON.parse(localStorage.getItem('ToDoListData')) ? JSON.parse(localStorage.getItem('ToDoListData')) : [],
       mainListElements: JSON.parse(localStorage.getItem('ToDoListData')) ?? [],
-      todoHeader: 'To do',
+      todoHeader: 'To Do',
       selectedComponents: 'Projects',
       selectedTasksList: [],
       todoDeleteMode: false,
@@ -178,7 +178,7 @@ export default {
     },
     backToProjectsList() {
       this.selectedComponents = 'Projects';
-      this.todoHeader = 'Projects';
+      this.todoHeader = 'To Do';
       this.isBackButtonActive = false;
       if (this.todoDeleteMode) {
         this.todoOffDeleteMode();
